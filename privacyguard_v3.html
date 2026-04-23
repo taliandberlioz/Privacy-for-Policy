@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrivacyGuard — Data Privacy Made Accessible</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Epilogue:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --shell:#FCF4EA;--olive:#BAB759;--peach:#FECCA5;
+  --marigold:#FD6842;--sky:#C1DFE3;--ivy:#548749;
+  --ink:#1C1A14;--ink2:#3a3726;--ink3:#6b6750;
+  --serif:'Fraunces',Georgia,serif;--sans:'Epilogue',system-ui,sans-serif;
+}
+body{font-family:var(--sans);background:var(--shell);color:var(--ink);font-size:15px;line-height:1.6;}
+.page{display:none;}
+.page.active{display:block;}
+
+nav{background:var(--shell);border-bottom:2px solid var(--ink);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100;}
+.nav-logo{font-family:var(--serif);font-size:19px;color:var(--ink);cursor:pointer;font-style:italic;letter-spacing:-0.5px;}
+.nav-logo span{color:var(--ivy);font-style:normal;}
+.nav-links{display:flex;gap:4px;align-items:center;flex-wrap:wrap;}
+.nav-link{background:none;border:none;font-family:var(--sans);font-size:13px;color:var(--ink3);cursor:pointer;padding:5px 10px;border-radius:3px;transition:all 0.12s;}
+.nav-link:hover{background:var(--peach);color:var(--ink);}
+.nav-link.active{color:var(--ivy);font-weight:500;}
+.nav-cta{background:var(--marigold);color:white;border:2px solid var(--ink);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;padding:6px 14px;border-radius:3px;transition:all 0.12s;}
+.nav-cta:hover{background:#e04e2a;}
+
+.hero{background:var(--ivy);padding:4.5rem 2.5rem 3.5rem;position:relative;overflow:hidden;}
+.hero-squiggle{position:absolute;top:0;right:0;width:340px;height:100%;background:var(--olive);clip-path:polygon(30% 0,100% 0,100% 100%,15% 100%);opacity:0.55;}
+.hero-dot{position:absolute;bottom:2rem;right:8%;width:120px;height:120px;border-radius:50%;background:var(--peach);opacity:0.4;}
+.hero-eyebrow{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--peach);font-weight:500;margin-bottom:1rem;position:relative;}
+.hero h1{font-family:var(--serif);font-size:clamp(2rem,4vw,2.9rem);color:var(--shell);line-height:1.1;margin-bottom:1.2rem;max-width:560px;position:relative;font-weight:400;}
+.hero h1 em{color:var(--peach);font-style:italic;}
+.hero p{color:rgba(252,244,234,0.75);font-size:15px;max-width:440px;margin-bottom:2rem;position:relative;}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap;position:relative;}
+.btn-pri{background:var(--marigold);color:white;border:2px solid var(--ink);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;padding:10px 22px;border-radius:3px;transition:all 0.12s;}
+.btn-pri:hover{background:#e04e2a;transform:translateY(-1px);}
+.btn-ghost{background:transparent;color:var(--shell);border:2px solid rgba(252,244,234,0.4);font-family:var(--sans);font-size:13px;cursor:pointer;padding:10px 22px;border-radius:3px;transition:all 0.12s;}
+.btn-ghost:hover{border-color:var(--shell);}
+
+.section{padding:3rem 2.5rem;max-width:880px;margin:0 auto;}
+.sec-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--olive);font-weight:500;margin-bottom:8px;}
+.sec-title{font-family:var(--serif);font-size:clamp(1.5rem,2.5vw,2rem);color:var(--ink);margin-bottom:.5rem;line-height:1.15;font-weight:400;}
+.sec-title em{color:var(--marigold);font-style:italic;}
+.sec-sub{color:var(--ink3);font-size:14px;margin-bottom:2rem;max-width:500px;}
+
+.stats-row{display:flex;flex-wrap:wrap;gap:12px;margin:2rem 0;}
+.stat-box{background:white;border:2px solid var(--ink);border-radius:4px;padding:.9rem 1.2rem;flex:1;min-width:100px;text-align:center;}
+.stat-num{font-family:var(--serif);font-size:2rem;color:var(--ivy);line-height:1;font-style:italic;}
+.stat-label{font-size:11px;color:var(--ink3);margin-top:3px;text-transform:uppercase;letter-spacing:1px;}
+
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;}
+.card{background:var(--shell);border:2px solid var(--ink);border-radius:4px;padding:1.25rem;cursor:pointer;transition:all 0.15s;}
+.card:hover{transform:translate(-2px,-3px);box-shadow:4px 4px 0 var(--ink);}
+.card-stripe{height:5px;border-radius:2px;margin-bottom:12px;}
+.card h3{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:5px;}
+.card p{font-size:13px;color:var(--ink3);line-height:1.5;}
+
+.sketch-divider{width:100%;height:14px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='14'%3E%3Cpath d='M0 7 Q50 2 100 7 Q150 12 200 7' stroke='%231C1A14' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:repeat-x;background-size:200px 14px;opacity:0.5;}
+
+.topic-section{background:white;border:2px solid var(--ink);border-radius:4px;margin-bottom:10px;overflow:hidden;}
+.topic-header{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;cursor:pointer;transition:background 0.12s;}
+.topic-header:hover{background:var(--peach);}
+.topic-header h3{font-size:14px;font-weight:500;color:var(--ink);}
+.topic-chevron{font-size:11px;color:var(--ink3);transition:transform 0.18s;flex-shrink:0;}
+.topic-body{display:none;padding:0 1.25rem 1.25rem;border-top:2px solid var(--ink);}
+.topic-body.open{display:block;}
+.topic-body p{font-size:13px;color:var(--ink3);margin-top:.9rem;line-height:1.7;}
+
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.tag{font-size:11px;padding:3px 9px;border-radius:2px;font-weight:500;border:1.5px solid var(--ink);}
+.t-olive{background:var(--olive);color:var(--ink2);}
+.t-sky{background:var(--sky);color:var(--ink2);}
+.t-marigold{background:var(--marigold);color:white;}
+.t-peach{background:var(--peach);color:var(--ink2);}
+
+.term-btn{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 9px 3px 10px;border-radius:2px;font-weight:500;border:1.5px solid var(--ink);cursor:pointer;font-family:var(--sans);transition:all 0.12s;}
+.term-btn .term-arrow{font-size:9px;transition:transform 0.18s;display:inline-block;}
+.term-btn.open .term-arrow{transform:rotate(180deg);}
+.term-btn:hover{filter:brightness(0.93);}
+
+.term-popup{display:none;background:white;border:2px solid var(--ink);border-radius:4px;padding:10px 14px;margin-top:8px;font-size:13px;color:var(--ink3);line-height:1.65;width:100%;}
+.term-popup.open{display:block;}
+.term-popup strong{color:var(--ink);display:block;margin-bottom:4px;font-size:13px;}
+
+.hl-box{background:var(--sky);border-left:4px solid var(--ivy);padding:1rem 1.25rem;margin:1rem 0;border-radius:0 4px 4px 0;}
+.hl-box p{font-size:13px;color:#1a3b35;line-height:1.7;}
+
+.case-card{background:white;border:2px solid var(--ink);border-radius:4px;padding:1.2rem;margin-bottom:10px;}
+.case-badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 9px;border-radius:2px;margin-bottom:7px;border:1.5px solid var(--ink);letter-spacing:.5px;text-transform:uppercase;}
+.b-fail{background:var(--marigold);color:white;}
+.b-win{background:var(--ivy);color:white;}
+.case-card h3{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:5px;}
+.case-card p{font-size:13px;color:var(--ink3);line-height:1.6;}
+
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+.team-card{background:white;border:2px solid var(--ink);border-radius:4px;padding:1.25rem;text-align:center;}
+.avatar{width:52px;height:52px;border-radius:50%;border:2px solid var(--ink);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;font-family:var(--serif);color:white;}
+.team-card h3{font-size:14px;font-weight:500;color:var(--ink);}
+.team-card p{font-size:12px;color:var(--ink3);margin-top:3px;}
+
+.ref-item{background:white;border:2px solid var(--ink);border-radius:4px;padding:10px 14px;font-size:13px;color:var(--ink3);margin-bottom:8px;}
+.contact-box{background:var(--ivy);border:2px solid var(--ink);border-radius:4px;padding:1.75rem;text-align:center;margin-top:2rem;}
+.contact-box h3{font-family:var(--serif);color:var(--shell);font-size:1.3rem;margin-bottom:5px;font-style:italic;font-weight:400;}
+.contact-box p{color:rgba(252,244,234,0.7);font-size:13px;margin-bottom:1rem;}
+.contact-box a{color:var(--peach);font-size:14px;font-weight:500;text-decoration:none;}
+
+.chat-wrap{max-width:580px;margin:0 auto;padding:2rem 1.5rem;}
+.chat-top{text-align:center;padding:1.5rem 0 1rem;}
+.chat-top h2{font-family:var(--serif);font-size:1.5rem;color:var(--ink);font-style:italic;font-weight:400;margin-bottom:3px;}
+.chat-top p{font-size:13px;color:var(--ink3);}
+.chat-head{background:var(--ivy);border:2px solid var(--ink);border-radius:4px 4px 0 0;padding:1rem 1.25rem;display:flex;align-items:center;gap:12px;}
+.chat-av{width:38px;height:38px;border-radius:50%;background:var(--olive);border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.chat-head h3{color:var(--shell);font-size:15px;font-weight:500;}
+.chat-head p{color:rgba(252,244,234,0.65);font-size:11px;}
+.online{width:7px;height:7px;border-radius:50%;background:var(--peach);display:inline-block;margin-right:4px;}
+.chat-body{background:var(--shell);border:2px solid var(--ink);border-top:none;padding:1.25rem;min-height:320px;max-height:500px;overflow-y:auto;}
+.prog-wrap{background:#d3cebd;border-radius:2px;height:4px;margin-bottom:14px;}
+.prog-fill{background:var(--marigold);height:4px;border-radius:2px;transition:width .4s ease;}
+.bot-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:10px;}
+.bot-ic{width:26px;height:26px;border-radius:50%;background:var(--olive);border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.bubble{display:inline-block;padding:9px 13px;border-radius:4px;font-size:13px;line-height:1.5;max-width:87%;border:1.5px solid var(--ink);}
+.bot-bubble{background:white;color:var(--ink);border-bottom-left-radius:1px;}
+.opts{display:flex;flex-direction:column;gap:7px;margin-top:8px;}
+.opt-btn{background:white;border:1.5px solid var(--ivy);color:var(--ivy);font-family:var(--sans);font-size:13px;font-weight:500;padding:9px 14px;border-radius:3px;cursor:pointer;text-align:left;transition:all 0.12s;}
+.opt-btn:hover{background:var(--sky);border-color:var(--ivy);}
+.chat-foot{background:var(--peach);border:2px solid var(--ink);border-top:none;border-radius:0 0 4px 4px;padding:.9rem;text-align:center;}
+.chat-foot p{font-size:11px;color:var(--ink3);}
+
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:999;background:var(--ink);border-top:3px solid var(--marigold);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;}
+#cookie-banner p{color:var(--shell);font-size:13px;flex:1;min-width:200px;line-height:1.6;}
+#cookie-banner p a{color:var(--peach);text-decoration:underline;cursor:pointer;}
+.cookie-btns{display:flex;gap:10px;flex-shrink:0;}
+.cookie-yes{background:var(--marigold);color:white;border:2px solid var(--shell);font-family:var(--sans);font-size:13px;font-weight:500;padding:7px 18px;border-radius:3px;cursor:pointer;transition:all 0.12s;}
+.cookie-yes:hover{background:#e04e2a;}
+.cookie-no{background:transparent;color:var(--shell);border:2px solid rgba(252,244,234,0.4);font-family:var(--sans);font-size:13px;padding:7px 18px;border-radius:3px;cursor:pointer;transition:all 0.12s;}
+.cookie-no:hover{border-color:var(--shell);}
+
+@media(max-width:600px){
+  .hero{padding:3rem 1.25rem 2.5rem;}
+  .section{padding:2rem 1.25rem;}
+  nav{padding:0 1rem;}
+  .nav-link:nth-child(n+4){display:none;}
+  #cookie-banner{padding:1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- COOKIE BANNER -->
+<div id="cookie-banner">
+  <p>🍪 We use cookies to improve your experience and analyse site usage. By clicking <strong>Accept</strong>, you consent to our use of cookies. <a onclick="showPage('about')">Learn more</a></p>
+  <div class="cookie-btns">
+    <button class="cookie-yes" onclick="closeCookies(true)">Accept</button>
+    <button class="cookie-no" onclick="closeCookies(false)">Decline</button>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">Privacy<span>Guard</span></div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="showPage('home')">Home</button>
+    <button class="nav-link" onclick="showPage('techniques')">Techniques</button>
+    <button class="nav-link" onclick="showPage('failures')">Failures</button>
+    <button class="nav-link" onclick="showPage('success')">Success Stories</button>
+    <button class="nav-link" onclick="showPage('about')">About</button>
+    <button class="nav-cta" onclick="showPage('chat')">Chat Now &rarr;</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-squiggle"></div>
+    <div class="hero-dot"></div>
+    <div class="hero-eyebrow">Data privacy made accessible</div>
+    <h1>Understanding <em>privacy technologies</em> shouldn't require a PhD!</h1>
+    <p>We help companies, businesses, and individuals navigate data protection, from the math behind differential privacy to the laws that govern your data.</p>
+    <div class="hero-btns">
+      <button class="btn-pri" onclick="showPage('chat')">Start the quiz &rarr;</button>
+      <button class="btn-ghost" onclick="showPage('techniques')">Explore techniques</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">4+</div><div class="stat-label">Tech categories</div></div>
+      <div class="stat-box"><div class="stat-num">50+</div><div class="stat-label">Laws covered</div></div>
+      <div class="stat-box"><div class="stat-num">12+</div><div class="stat-label">Case studies</div></div>
+      <div class="stat-box"><div class="stat-num">&infin;</div><div class="stat-label">Quiz paths</div></div>
+    </div>
+    <div class="sec-label">What we cover</div>
+    <div class="sec-title">Four core <em>areas</em> of data privacy</div>
+    <div class="sec-sub">From mathematical guarantees to legal frameworks — everything you need to make informed decisions.</div>
+    <div class="card-grid">
+      <div class="card" onclick="showPage('techniques')">
+        <div class="card-stripe" style="background:var(--olive)"></div>
+        <h3>Differential privacy &amp; cryptography</h3>
+        <p>Epsilon, Rényi DP, SMPC, homomorphic encryption — explained clearly.</p>
+      </div>
+      <div class="card" onclick="showPage('techniques')">
+        <div class="card-stripe" style="background:var(--sky)"></div>
+        <h3>Federated learning</h3>
+        <p>Train models across distributed data without centralizing sensitive records.</p>
+      </div>
+      <div class="card" onclick="showPage('techniques')">
+        <div class="card-stripe" style="background:var(--peach)"></div>
+        <h3>Privacy laws &amp; legal cases</h3>
+        <p>GDPR, CCPA, HIPAA, and the court cases that shaped them.</p>
+      </div>
+      <div class="card" onclick="showPage('failures')">
+        <div class="card-stripe" style="background:var(--marigold)"></div>
+        <h3>Why anonymization fails</h3>
+        <p>Re-identification attacks, limitations, and real failures with case studies.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sketch-divider"></div>
+
+  <div class="section" style="text-align:center;padding-top:2.5rem;padding-bottom:3rem;">
+    <div class="sec-label">Our tool</div>
+    <div class="sec-title" style="max-width:480px;margin:0 auto 0.5rem;">Find the right privacy solution for <em>your</em> situation</div>
+    <div class="sec-sub" style="margin:0 auto 1.5rem;text-align:center;">Answer a few guided questions to get personalized recommendations — no technical background required.</div>
+    <button class="btn-pri" onclick="showPage('chat')">Take the quiz &rarr;</button>
+  </div>
+</div>
+
+<!-- TECHNIQUES -->
+<div id="page-techniques" class="page">
+  <div class="section">
+    <div class="sec-label">Privacy techniques</div>
+    <div class="sec-title">The technical &amp; legal <em>toolkit</em></div>
+    <div class="sec-sub">Click any section to expand. Click the tagged terms to read their definitions.</div>
+
+    <div class="topic-section">
+      <div class="topic-header" onclick="toggleSection(this)">
+        <h3>&#9632; Differential privacy</h3><span class="topic-chevron">&#9660;</span>
+      </div>
+      <div class="topic-body">
+        <p>Differential privacy provides a mathematical framework for quantifying privacy risk. By injecting calibrated statistical noise into queries or model outputs, it guarantees that any single individual's presence or absence in a dataset has a bounded effect on the result.</p>
+        <div class="hl-box"><p><strong>Key parameter: &epsilon; (epsilon)</strong> — the privacy budget. Smaller &epsilon; = stronger privacy but lower utility. Typical values range from 0.1 (strong) to 10 (weak).</p></div>
+        <div class="tag-row">
+          <button class="term-btn t-olive" onclick="toggleTerm('epsilon')">Epsilon (&epsilon;) <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-olive" onclick="toggleTerm('renyi')">Rényi DP <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-olive" onclick="toggleTerm('localdp')">Local DP <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-olive" onclick="toggleTerm('globaldp')">Global DP <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-sky" onclick="toggleTerm('noisecal')">Noise calibration <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-sky" onclick="toggleTerm('composition')">Composition theorems <span class="term-arrow">&#9660;</span></button>
+        </div>
+        <div class="term-popup" id="term-epsilon"><strong>Epsilon (&epsilon;) — Privacy Budget</strong>The core parameter of differential privacy. It bounds how much the output of a computation can differ based on one individual's data. A smaller &epsilon; (e.g. 0.1) gives a stronger privacy guarantee but requires adding more noise, reducing accuracy. A larger &epsilon; (e.g. 10) is weaker but more accurate. Setting &epsilon; is a deliberate privacy-utility trade-off.</div>
+        <div class="term-popup" id="term-renyi"><strong>Rényi Differential Privacy (RDP)</strong>An extension of standard DP that measures privacy loss using Rényi divergence — a generalization of KL divergence parameterized by order &alpha;. RDP offers tighter composition bounds when running multiple queries, making it especially useful for training machine learning models across many iterations (e.g. SGD with DP). Developed by Mironov (2017).</div>
+        <div class="term-popup" id="term-localdp"><strong>Local Differential Privacy (LDP)</strong>A variant of DP where each individual adds noise to their own data before it ever leaves their device or reaches any server. No trusted central curator is required. Apple and Google use LDP for collecting usage statistics. The trade-off: LDP typically requires more noise than global DP for the same accuracy, because there is no aggregation to average out individual noise.</div>
+        <div class="term-popup" id="term-globaldp"><strong>Global (Central) Differential Privacy</strong>The classic DP model where a trusted curator collects raw data from individuals and adds noise to the aggregate query output before releasing it. Offers higher accuracy than Local DP for the same &epsilon;, but requires users to trust the data collector. Used in the U.S. Census Bureau's 2020 deployment.</div>
+        <div class="term-popup" id="term-noisecal"><strong>Noise Calibration</strong>The process of choosing how much noise to add to a query output to satisfy a given &epsilon; guarantee. The amount of noise is proportional to the query's sensitivity — how much a single individual's data can change the result. Common noise distributions used are Laplace (for numeric queries) and Gaussian (for vector-valued outputs).</div>
+        <div class="term-popup" id="term-composition"><strong>Composition Theorems</strong>Rules that describe how privacy loss accumulates when multiple DP mechanisms are applied to the same dataset. Basic composition: running k mechanisms each with &epsilon; gives total &epsilon;·k privacy loss. Advanced composition (and RDP) gives tighter bounds. Essential for understanding the true privacy cost of machine learning training with many iterations.</div>
+      </div>
+    </div>
+
+    <div class="topic-section">
+      <div class="topic-header" onclick="toggleSection(this)">
+        <h3>&#9632; Cryptographic methods</h3><span class="topic-chevron">&#9660;</span>
+      </div>
+      <div class="topic-body">
+        <p>Cryptographic approaches enable computation on sensitive data without exposing the underlying values — critical in multi-party settings where no single party should see the combined dataset.</p>
+        <div class="tag-row">
+          <button class="term-btn t-sky" onclick="toggleTerm('smpc')">SMPC <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-sky" onclick="toggleTerm('he')">Homomorphic encryption <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-sky" onclick="toggleTerm('zkp')">Zero-knowledge proofs <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-olive" onclick="toggleTerm('e2e')">End-to-end encryption <span class="term-arrow">&#9660;</span></button>
+        </div>
+        <div class="term-popup" id="term-smpc"><strong>Secure Multiparty Computation (SMPC)</strong>A cryptographic protocol allowing multiple parties to jointly compute a function over their combined inputs without any party revealing their private input to others. Classic examples: Yao's Garbled Circuits (two-party) and the GMW protocol (multi-party). Used in privacy-preserving auctions, joint analytics across institutions, and federated statistics.</div>
+        <div class="term-popup" id="term-he"><strong>Homomorphic Encryption (HE)</strong>An encryption scheme that allows computations to be performed directly on ciphertext. The decrypted result matches what you would get from performing the same computation on the plaintext. Fully Homomorphic Encryption (FHE) supports arbitrary computations but is computationally expensive. Partially homomorphic schemes (like Paillier) support only addition or multiplication, but are much faster.</div>
+        <div class="term-popup" id="term-zkp"><strong>Zero-Knowledge Proofs (ZKP)</strong>A method by which one party (the prover) can prove to another (the verifier) that a statement is true without revealing any information beyond the truth of the statement itself. Example: proving you know a password without revealing it. Used in blockchain privacy (e.g. zk-SNARKs), identity verification, and regulatory compliance without data disclosure.</div>
+        <div class="term-popup" id="term-e2e"><strong>End-to-End Encryption (E2EE)</strong>A communication system where only the communicating users can read the messages. The service provider transmits encrypted data but cannot decrypt it. Used in messaging apps (Signal, WhatsApp), secure email, and file storage. E2EE protects data in transit and at rest from third parties, including the platform itself.</div>
+      </div>
+    </div>
+
+    <div class="topic-section">
+      <div class="topic-header" onclick="toggleSection(this)">
+        <h3>&#9632; Federated learning</h3><span class="topic-chevron">&#9660;</span>
+      </div>
+      <div class="topic-body">
+        <p>Federated learning trains ML models across decentralized devices holding local data — only model gradients are shared, never raw data. Especially valuable in healthcare and mobile settings.</p>
+        <p><strong>Key constraints:</strong> high communication costs, non-IID data distributions, and gradient inversion attacks. Often paired with differential privacy for stronger guarantees.</p>
+        <div class="tag-row">
+          <button class="term-btn t-olive" onclick="toggleTerm('crossdevice')">Cross-device FL <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-olive" onclick="toggleTerm('crosssilo')">Cross-silo FL <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-sky" onclick="toggleTerm('gradagg')">Gradient aggregation <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-marigold" onclick="toggleTerm('gradinv')">Gradient inversion risk <span class="term-arrow">&#9660;</span></button>
+        </div>
+        <div class="term-popup" id="term-crossdevice"><strong>Cross-Device Federated Learning</strong>FL deployed across a very large number of edge devices (e.g. smartphones). Each device trains locally on its own data and sends only model updates. Involves millions of clients, high dropout rates, and heterogeneous hardware. Google's Gboard and Apple's on-device models use this approach.</div>
+        <div class="term-popup" id="term-crosssilo"><strong>Cross-Silo Federated Learning</strong>FL across a small number of organizations or data silos (e.g. hospitals, banks). Each silo holds a large dataset and participates reliably. Used in healthcare consortia to train models on patient data across multiple institutions without sharing records. Easier to coordinate than cross-device FL but requires data governance agreements.</div>
+        <div class="term-popup" id="term-gradagg"><strong>Gradient Aggregation</strong>The central step in federated learning: each participant computes gradients on their local data and sends them to a server, which aggregates them (typically via averaging) to update the global model. Secure aggregation protocols ensure the server only sees the aggregate, not individual gradients, providing additional privacy guarantees.</div>
+        <div class="term-popup" id="term-gradinv"><strong>Gradient Inversion Attacks</strong>A class of attacks (e.g. Deep Leakage from Gradients, Geiping et al.) that can reconstruct training data from shared gradients. An adversarial server (or man-in-the-middle) can recover near-pixel-perfect images or sensitive text from gradient updates alone. This is why FL alone is not sufficient for privacy — pairing with DP or secure aggregation is recommended.</div>
+      </div>
+    </div>
+
+    <div class="topic-section">
+      <div class="topic-header" onclick="toggleSection(this)">
+        <h3>&#9632; Privacy laws &amp; legal considerations</h3><span class="topic-chevron">&#9660;</span>
+      </div>
+      <div class="topic-body">
+        <p>Privacy is a legal challenge as much as a technical one. Organizations must navigate regulations that vary by jurisdiction and sector.</p>
+        <div class="tag-row">
+          <button class="term-btn t-sky" onclick="toggleTerm('gdpr')">GDPR (EU) <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-sky" onclick="toggleTerm('ccpa')">CCPA (California) <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-sky" onclick="toggleTerm('hipaa')">HIPAA (Healthcare) <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-sky" onclick="toggleTerm('coppa')">COPPA (Children) <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-sky" onclick="toggleTerm('pipeda')">PIPEDA (Canada) <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-sky" onclick="toggleTerm('pdpa')">PDPA (Singapore) <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-olive" onclick="toggleTerm('minimization')">Data minimization <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-olive" onclick="toggleTerm('erasure')">Right to erasure <span class="term-arrow">&#9660;</span></button>
+          <button class="term-btn t-marigold" onclick="toggleTerm('penalties')">Non-compliance penalties <span class="term-arrow">&#9660;</span></button>
+        </div>
+        <div class="term-popup" id="term-gdpr"><strong>General Data Protection Regulation (GDPR) — EU, 2018</strong>The world's most comprehensive data protection law, applying to any organization handling EU residents' data. Key rights: access, erasure, portability, objection to automated decisions. Requires a lawful basis for processing, Data Protection Impact Assessments (DPIAs) for high-risk activities, and data breach notification within 72 hours. Penalties: up to €20M or 4% of global annual turnover.</div>
+        <div class="term-popup" id="term-ccpa"><strong>California Consumer Privacy Act (CCPA) — California, 2020</strong>Gives California residents the right to know what personal data is collected, the right to delete it, and the right to opt out of its sale. The CPRA (2023 amendment) added a right to correct inaccurate data, restricted use of sensitive personal information, and created the California Privacy Protection Agency. Applies to businesses meeting certain size/revenue thresholds.</div>
+        <div class="term-popup" id="term-hipaa"><strong>Health Insurance Portability and Accountability Act (HIPAA) — US, 1996</strong>Governs the use and disclosure of Protected Health Information (PHI) by covered entities (healthcare providers, insurers) and their business associates. The Privacy Rule defines what constitutes PHI and when it may be shared. The Security Rule mandates technical safeguards for electronic PHI. Violations can result in civil penalties up to $1.9M per violation category per year.</div>
+        <div class="term-popup" id="term-coppa"><strong>Children's Online Privacy Protection Act (COPPA) — US, 1998</strong>Restricts the collection of personal information from children under 13 by online services. Requires verifiable parental consent before collecting, using, or disclosing a child's data. Operators must maintain a clear privacy policy and allow parents to review or delete their child's data. Enforced by the FTC; violations can result in civil penalties up to $51,744 per violation.</div>
+        <div class="term-popup" id="term-pipeda"><strong>Personal Information Protection and Electronic Documents Act (PIPEDA) — Canada, 2000</strong>Canada's federal private-sector privacy law. Requires organizations to obtain meaningful consent for data collection, use, and disclosure; limit collection to what's necessary; and protect personal information with appropriate safeguards. Being updated by Bill C-27 (Consumer Privacy Protection Act), which would introduce stronger consent requirements and significant penalties.</div>
+        <div class="term-popup" id="term-pdpa"><strong>Personal Data Protection Act (PDPA) — Singapore, 2012</strong>Singapore's main data protection law, covering the collection, use, and disclosure of personal data by private organizations. Amended in 2020 to introduce mandatory breach notification (within 3 days for significant breaches), increased financial penalties (up to S$1M or 10% of annual Singapore turnover), and new provisions for data portability and deemed consent.</div>
+        <div class="term-popup" id="term-minimization"><strong>Data Minimization</strong>A core privacy principle (enshrined in GDPR Article 5) requiring that only the minimum necessary personal data be collected for a specified, explicit, and legitimate purpose. Organizations should not collect data "just in case" it might be useful later. Technically, this aligns with differential privacy's idea of limiting exposure — collect less, risk less.</div>
+        <div class="term-popup" id="term-erasure"><strong>Right to Erasure ("Right to be Forgotten")</strong>Under GDPR Article 17, individuals can request deletion of their personal data when it is no longer necessary for the original purpose, consent is withdrawn, or the data was unlawfully processed. The landmark case Google Spain v. AEPD (2014) established this right in EU law. Technical challenge: deletion from ML models trained on personal data is an active research area ("machine unlearning").</div>
+        <div class="term-popup" id="term-penalties"><strong>Non-Compliance Penalties</strong>GDPR: up to €20M or 4% of global annual turnover (whichever is higher). Notable fines: Meta €1.2B (2023), Amazon €746M (2021), WhatsApp €225M (2021). CCPA: $2,500 per unintentional violation, $7,500 per intentional violation. HIPAA: $100–$50,000 per violation, up to $1.9M annually. Criminal liability possible for intentional violations.</div>
+        <p style="margin-top:14px;font-size:13px;color:var(--ink3);"><strong>Notable court cases:</strong> Google LLC v. CNIL (2019) — CJEU ruled right to erasure applies within EU only, not globally. Meta GDPR fine (2023) — €1.2B for unlawful transfer of EU user data to the US. Illinois BIPA litigation — multiple class actions (Facebook $650M, TikTok $92M) for biometric data collection without consent.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAILURES -->
+<div id="page-failures" class="page">
+  <div class="section">
+    <div class="sec-label">Why anonymisation fails</div>
+    <div class="sec-title">The <em>limits</em> of de-identification</div>
+    <div class="sec-sub">Supposedly anonymous datasets can be re-identified using auxiliary information. As few as 3–4 quasi-identifiers can uniquely identify most individuals in a dataset.</div>
+    <div class="hl-box"><p>Anonymisation is not a privacy guarantee — it is a risk reduction heuristic. Without mathematical privacy guarantees (like DP), re-identification is almost always possible given enough auxiliary data.</p></div>
+    <div class="card-grid" style="margin:1.5rem 0;">
+      <div class="card" style="cursor:default"><div class="card-stripe" style="background:var(--marigold)"></div><h3>Re-identification attacks</h3><p>Combining anonymized data with public datasets can uniquely identify individuals.</p></div>
+      <div class="card" style="cursor:default"><div class="card-stripe" style="background:var(--peach)"></div><h3>Quasi-identifiers</h3><p>Non-identifying attributes in combination (ZIP + age + gender) can pinpoint a person.</p></div>
+      <div class="card" style="cursor:default"><div class="card-stripe" style="background:var(--olive)"></div><h3>ML inference attacks</h3><p>Models trained on anonymized data can be probed to reveal membership or sensitive attributes.</p></div>
+    </div>
+    <div class="sec-label" style="margin-top:2rem">Case studies</div>
+    <div class="case-card"><span class="case-badge b-fail">Location data</span><h3>NYC Taxi data (2014)</h3><p>A dataset released under FOIA with hashed medallion numbers was reverse-engineered by researchers, who then cross-referenced celebrity photos to trace individual taxi trips and infer driver earnings.</p></div>
+    <div class="case-card"><span class="case-badge b-fail">Re-identification</span><h3>Netflix Prize dataset (2009)</h3><p>Narayanan &amp; Shmatikoff showed that 8 movie ratings plus approximate dates were sufficient to uniquely identify most users in Netflix's anonymized dataset, by cross-referencing IMDb reviews.</p></div>
+    <div class="case-card"><span class="case-badge b-fail">Behavioral data</span><h3>AOL search query release (2006)</h3><p>AOL released 20 million queries with user IDs replaced by numbers. New York Times journalists identified specific individuals within days — behavioral patterns alone are identifying, even without names.</p></div>
+    <div class="case-card"><span class="case-badge b-fail">Health data</span><h3>Massachusetts medical records (Sweeney, 1997)</h3><p>Latanya Sweeney re-identified the Massachusetts governor's medical records from a "de-identified" state employee health database using only ZIP code, birth date, and sex — all available in the voter registration list.</p></div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div id="page-success" class="page">
+  <div class="section">
+    <div class="sec-label">Success stories</div>
+    <div class="sec-title">When privacy <em>works</em></div>
+    <div class="sec-sub">Privacy-preserving technologies are already powering real-world systems at scale.</div>
+    <div class="case-card"><span class="case-badge b-win">Federated learning</span><h3>Google Gboard (2016–present)</h3><p>Google uses federated learning to improve next-word prediction on Gboard without sending keystrokes to central servers. Model updates are computed on-device, aggregated securely, and released with differential privacy — a landmark deployment at consumer scale.</p></div>
+    <div class="case-card"><span class="case-badge b-win">Differential privacy</span><h3>Apple's usage statistics (2016–present)</h3><p>Apple applies local differential privacy to collect emoji usage, QuickType suggestions, and crash data from hundreds of millions of devices. Each device adds noise before transmission, so no individual's behavior can be reconstructed.</p></div>
+    <div class="case-card"><span class="case-badge b-win">Differential privacy</span><h3>U.S. Census Bureau (2020)</h3><p>The 2020 U.S. Census deployed differential privacy at unprecedented scale, using the TopDown algorithm to release demographic statistics while bounding individual disclosure risk — the largest real-world DP deployment to date.</p></div>
+    <div class="case-card"><span class="case-badge b-win">SMPC + Cryptography</span><h3>COVID-19 contact tracing — DP-3T (2020)</h3><p>The Decentralized Privacy-Preserving Proximity Tracing protocol kept all contact data on-device and used cryptographic identifiers. Users were notified of exposure without revealing identities of infected contacts to any central server.</p></div>
+    <div style="background:white;border:2px solid var(--ink);border-radius:4px;padding:1.25rem;margin-top:1rem;">
+      <div class="sec-label" style="margin-bottom:6px">From our research</div>
+      <p style="font-size:14px;color:var(--ink3);">Our team has reviewed additional case studies across healthcare (federated EHR analysis), financial services (SMPC for cross-institution fraud detection), and academic work demonstrating that strong privacy guarantees and high model utility can coexist with careful engineering.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div id="page-about" class="page">
+  <div class="section">
+    <div class="sec-label">About us</div>
+    <div class="sec-title">Researchers on a <em>mission</em></div>
+    <div class="sec-sub">We are researchers and engineers dedicated to making privacy-preserving technologies visible and accessible to everyone.</div>
+    <div class="hl-box"><p>Our mission: create visibility around privacy-preserving technologies so that organizations of all sizes can make informed, principled decisions about how they collect, process, and protect data.</p></div>
+    <div style="margin:2rem 0">
+      <div class="sec-label" style="margin-bottom:10px">Our team</div>
+      <div class="team-grid">
+        <div class="team-card"><div class="avatar" style="background:var(--ivy)">A</div><h3>Team Member</h3><p>Privacy researcher</p></div>
+        <div class="team-card"><div class="avatar" style="background:var(--olive)">B</div><h3>Team Member</h3><p>Cryptography &amp; ML</p></div>
+        <div class="team-card"><div class="avatar" style="background:var(--marigold)">C</div><h3>Team Member</h3><p>Legal &amp; compliance</p></div>
+        <div class="team-card"><div class="avatar" style="background:var(--sky);color:var(--ink)">D</div><h3>Team Member</h3><p>Data engineering</p></div>
+      </div>
+    </div>
+    <div style="margin:2rem 0">
+      <div class="sec-label" style="margin-bottom:10px">Key citations</div>
+      <div class="ref-item">Dwork, C. &amp; Roth, A. (2014). <em>The Algorithmic Foundations of Differential Privacy.</em> Foundations and Trends in TCS.</div>
+      <div class="ref-item">McMahan, H. B. et al. (2017). <em>Communication-Efficient Learning of Deep Networks from Decentralized Data.</em> AISTATS.</div>
+      <div class="ref-item">Narayanan, A. &amp; Vitaly, S. (2008). <em>Robust De-anonymization of Large Sparse Datasets.</em> IEEE S&amp;P.</div>
+      <div class="ref-item">Sweeney, L. (2002). <em>k-anonymity: A Model for Protecting Privacy.</em> IJUFKS.</div>
+      <div class="ref-item" style="font-style:italic">+ course materials and additional primary sources (full bibliography available on request).</div>
+    </div>
+    <div class="contact-box">
+      <h3>Get in touch</h3>
+      <p>Questions, feedback, or collaboration inquiries?</p>
+      <a href="mailto:team@privacyguard.example.com">team@privacyguard.example.com</a>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div id="page-chat" class="page">
+  <div class="chat-wrap">
+    <div class="chat-top">
+      <h2>Privacy Advisor</h2>
+      <p>Answer a few questions to get personalized recommendations</p>
+    </div>
+    <div class="chat-head">
+      <div class="chat-av">&#128737;</div>
+      <div>
+        <h3>PrivacyGuard assistant</h3>
+        <p><span class="online"></span>Online — ready to help</p>
+      </div>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="prog-wrap"><div class="prog-fill" id="progBar" style="width:0%"></div></div>
+      <div id="chatMsgs"></div>
+    </div>
+    <div class="chat-foot"><p>This tool provides educational guidance only, not legal advice. If redirected, please chat to an agent.</p></div>
+  </div>
+</div>
+
+<script>
+var pages = ['home','techniques','failures','success','about','chat'];
+
+function showPage(n) {
+  pages.forEach(function(p) {
+    document.getElementById('page-' + p).classList.remove('active');
+  });
+  document.getElementById('page-' + n).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(function(b) {
+    var t = b.textContent.trim().toLowerCase();
+    var isActive = (n === 'home' && t === 'home') ||
+                   (n === 'techniques' && t === 'techniques') ||
+                   (n === 'failures' && t === 'failures') ||
+                   (n === 'success' && t === 'success stories') ||
+                   (n === 'about' && t === 'about');
+    b.classList.toggle('active', isActive);
+  });
+  if (n === 'chat') initChat();
+  window.scrollTo(0, 0);
+}
+
+function toggleSection(hdr) {
+  var body = hdr.nextElementSibling;
+  var chevron = hdr.querySelector('.topic-chevron');
+  body.classList.toggle('open');
+  chevron.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+function toggleTerm(id) {
+  var popup = document.getElementById('term-' + id);
+  var isOpen = popup.classList.contains('open');
+  document.querySelectorAll('.term-popup').forEach(function(p) { p.classList.remove('open'); });
+  document.querySelectorAll('.term-btn').forEach(function(b) { b.classList.remove('open'); });
+  if (!isOpen) {
+    popup.classList.add('open');
+    document.querySelectorAll('[onclick="toggleTerm(\'' + id + '\')"]').forEach(function(b) { b.classList.add('open'); });
+  }
+}
+
+function closeCookies(accepted) {
+  var banner = document.getElementById('cookie-banner');
+  banner.style.transition = 'opacity 0.3s, transform 0.3s';
+  banner.style.opacity = '0';
+  banner.style.transform = 'translateY(20px)';
+  setTimeout(function() { banner.style.display = 'none'; }, 300);
+}
+
+var chatDone = false;
+
+var Q = [
+  /* 0 */  {bot:"Hi! I'm here to help you find the right privacy technology. Let's start — who are you?",opts:[{l:"A business or organization",n:1},{l:"A researcher or student",n:2},{l:"An individual / consumer",n:3}]},
+  /* 1 */  {bot:"What's your main privacy concern as an organization?",opts:[{l:"Comply with GDPR / CCPA",n:4},{l:"Train ML models privately",n:5},{l:"Share data safely with partners",n:6}]},
+  /* 2 */  {bot:"What topic interests you most?",opts:[{l:"Differential privacy & its math",n:7},{l:"Federated learning for ML",n:5},{l:"Historical anonymization failures",n:8}]},
+  /* 3 */  {bot:"What aspect of your personal data privacy concerns you most?",opts:[{l:"Apps tracking my location",n:9},{l:"My health or financial data",n:10},{l:"Understanding my legal rights",n:4}]},
+  /* 4 */  {bot:"For GDPR/CCPA compliance, focus on data minimization, purpose limitation, and proper consent flows. Differential privacy for analytics can help avoid storing raw personal data at all. Want to go deeper into the law or the tools?",opts:[{l:"Privacy laws deep-dive",n:11},{l:"Show me the technical tools",n:7}]},
+  /* 5 */  {bot:"For privacy-preserving ML, you have two main options: Federated Learning keeps data on-device and shares only model updates; Differential Privacy adds mathematical noise to protect individuals during training. Most production systems use both together.",opts:[{l:"Federated learning details",n:12},{l:"Differential privacy details",n:7},{l:"See a real-world example",n:13}]},
+  /* 6 */  {bot:"For secure multi-party data collaboration, Secure Multiparty Computation (SMPC) lets multiple parties jointly compute over data without any party seeing the others' raw inputs. Homomorphic encryption is an emerging scalable alternative.",opts:[{l:"How does SMPC work?",n:14},{l:"Is this used in practice?",n:13}]},
+  /* 7 */  {bot:"Differential Privacy gives a formal, mathematical guarantee controlled by \u03b5 (epsilon). Smaller \u03b5 = stronger privacy but more noise. Rényi DP extends this with moment-based analysis for tighter sequential composition.",opts:[{l:"What \u03b5 value should I use?",n:15},{l:"Back to the start",n:'restart'}]},
+  /* 8 */  {bot:"Anonymization failures are important to understand. Famous cases include Netflix (2006), where researchers re-identified users from movie ratings, and AOL search data (2006), where journalists identified individuals from behavioral patterns alone.",opts:[{l:"Read the full case studies",n:16},{l:"What works instead?",n:7}]},
+  /* 9 */  {bot:"Location tracking is a known re-identification risk — studies show just 4 data points can uniquely identify most people. Review your app permissions, use privacy-focused browsers, and know your CCPA/GDPR rights.",opts:[{l:"Tell me about my legal rights",n:4},{l:"Start over",n:'restart'}]},
+  /* 10 */ {bot:"Health and financial data are among the most sensitive. HIPAA governs health data in the US; GLBA covers financial data. Federated learning is increasingly used in healthcare to run analyses across hospitals without pooling patient records.",opts:[{l:"How does federated learning help?",n:5},{l:"Start over",n:'restart'}]},
+  /* 11 */ {bot:"GDPR, CCPA, HIPAA, and COPPA are the major frameworks. Non-compliance penalties can reach \u20ac20M or 4% of global revenue under GDPR. Which would you like to explore?",opts:[{l:"GDPR",n:17},{l:"CCPA",n:18},{l:"Start over",n:'restart'}]},
+  /* 12 */ {bot:"Federated learning trains models across distributed data sources — each participant trains locally and sends only gradients to a central aggregator. Google uses this for Gboard on billions of phones. Gradient inversion attacks remain a risk, so DP is often added.",opts:[{l:"See success stories",n:13},{l:"Start over",n:'restart'}]},
+  /* 13 */ {bot:"Real success stories: Google Gboard (federated learning), Apple local DP for usage stats, the 2020 U.S. Census (largest real-world DP deployment), and COVID DP-3T contact tracing — all with no central sensitive database.",opts:[{l:"Read more success stories",n:19},{l:"Start over",n:'restart'}]},
+  /* 14 */ {bot:"SMPC works via secret sharing: each party splits their input into random-looking shares distributed to others. No single party holds a complete share, but together they compute the correct output. Yao's Garbled Circuits and the GMW protocol are the classic constructions.",opts:[{l:"See practical examples",n:13},{l:"Start over",n:'restart'}]},
+  /* 15 */ {bot:"Choosing \u03b5 depends on your threat model. For census-like statistics, \u03b5 \u2248 1 is common. For high-utility analytics, \u03b5 \u2248 3\u201310 may be acceptable. Apple uses local DP with \u03b5 \u2248 8 in practice. It's a trade-off — there's no universal right answer.",opts:[{l:"Explore federated learning instead",n:5},{l:"Start over",n:'restart'}]},
+  /* 16 */ {bot:"You can explore the full case studies in our Failures section — covering Netflix, Massachusetts health records, NYC taxi data, and AOL search queries.",opts:[{l:"Go to failures page",n:20},{l:"Start over",n:'restart'}]},
+  /* 17 */ {bot:"GDPR gives EU residents rights including: access, erasure ('right to be forgotten'), portability, and objecting to automated decisions. Controllers must have a lawful basis for processing and conduct DPIAs for high-risk activities.",opts:[{l:"Tools that help with GDPR",n:7},{l:"Start over",n:'restart'}]},
+  /* 18 */ {bot:"CCPA gives California residents the right to know what data is collected, delete it, and opt out of its sale. The 2023 CPRA amendment added rights to correct data and extended protections for sensitive personal information.",opts:[{l:"Tools that help with CCPA",n:7},{l:"Start over",n:'restart'}]},
+  /* 19 */ {bot:"You've covered a great range of topics! Head to the Success Stories page for a deeper look, or restart the quiz to explore a different angle.",opts:[{l:"Go to success stories",n:21},{l:"Start over",n:'restart'}]},
+  /* 20 */ {redirect:'failures'},
+  /* 21 */ {redirect:'success'}
+];
+
+function initChat() {
+  if (chatDone) return;
+  chatDone = true;
+  renderQ(0);
+}
+
+function restartChat() {
+  document.getElementById('chatMsgs').innerHTML = '';
+  document.getElementById('progBar').style.width = '0%';
+  chatDone = false;
+  initChat();
+}
+
+function renderQ(idx) {
+  if (idx === 'restart') { restartChat(); return; }
+  var s = Q[idx];
+  if (s.redirect) { showPage(s.redirect); return; }
+
+  var msgs = document.getElementById('chatMsgs');
+  var pct = Math.min(100, Math.round(idx / (Q.length - 1) * 100));
+  document.getElementById('progBar').style.width = pct + '%';
+
+  var row = document.createElement('div');
+  row.className = 'bot-row';
+  row.innerHTML = '<div class="bot-ic">&#128737;</div><div class="bubble bot-bubble">' + s.bot + '</div>';
+  msgs.appendChild(row);
+
+  var box = document.createElement('div');
+  box.className = 'opts';
+  box.id = 'opts' + idx;
+  s.opts.forEach(function(o) {
+    var b = document.createElement('button');
+    b.className = 'opt-btn';
+    b.textContent = o.l;
+    b.onclick = function() {
+      document.querySelectorAll('#opts' + idx + ' button').forEach(function(bb) {
+        bb.disabled = true;
+        bb.style.opacity = bb.textContent === o.l ? '1' : '0.3';
+      });
+      var u = document.createElement('div');
+      u.style.cssText = 'text-align:right;margin:8px 0;';
+      u.innerHTML = '<span class="bubble" style="background:var(--ivy);color:white;border-color:var(--ink);border-bottom-right-radius:1px;">' + o.l + '</span>';
+      msgs.appendChild(u);
+      setTimeout(function() {
+        renderQ(o.n);
+        document.getElementById('chatBody').scrollTop = 9999;
+      }, 320);
+    };
+    box.appendChild(b);
+  });
+  msgs.appendChild(box);
+  document.getElementById('chatBody').scrollTop = 9999;
+}
+</script>
+</body>
+</html>
